@@ -19,6 +19,7 @@ class RoomWizardCommand:
         self.tz = request_body.args.get('time_zone', default='US/Eastern')
         self.date = arrow.utcnow().to(self.tz).format('YYYYMMDD')
         self.time = arrow.utcnow().to(self.tz).format('HHmmss')
+        self.version = '0.1'
 
 
 class AboutConnector(RoomWizardCommand):
@@ -67,33 +68,16 @@ class GetBookings(RoomWizardCommand):
             <kwe:date>{self.date}</kwe:date>
             <kwe:time>{self.time}</kwe:time>
             <kwe:result_code>0</kwe:result_code>
-            <kwe:connector>
-                <kwe:version>3.1</kwe:version>
-                <kwe:api name="Room Booking API" version="1.0"></kwe:api>
-                <kwe:api name="Room Booking API" version="1.1"></kwe:api>
-                <rb:bookings room_id="{self.room_id}">
+            <rb:bookings room_id="{self.room_id}">
                     <rb:booking booking_id="mark123abc" confidential="no" password_protected="no">
-                        <rb:start_date>
-                            {self.range_start_date}
-                        </rb:start_date>
-                        <rb:end_date>
-                            {self.range_start_date}
-                        </rb:end_date>
-                        <rb:start_time>
-                            220000
-                        </rb:start_time>
-                        <rb:end_time>
-                            230000
-                        </rb:end_time>
-                        <rb:purpose>
-                            Mark's Meeting
-                        </rb:purpose>
-                        <rb:notes>
-                            Mark rules!
-                        </rb:notes>
+                        <rb:start_date>{self.range_start_date}</rb:start_date>
+                        <rb:end_date>{self.range_start_date}</rb:end_date>
+                        <rb:start_time>220000</rb:start_time>
+                        <rb:end_time>230000</rb:end_time>
+                        <rb:purpose>Mark's Meeting</rb:purpose>
+                        <rb:notes>Mark rules!</rb:notes>
                     </rb:booking>
                 </rb:bookings>
-            </kwe:connector>
         </kwe:result>
         """
 
