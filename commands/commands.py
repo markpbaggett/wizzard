@@ -1,4 +1,17 @@
 import arrow
+from flask import request
+
+
+class GetResponse:
+    def __init__(self, request_body):
+        self.command = request_body.args.get('command', default='about_connector')
+        self.response = self.__get_command(request_body)
+
+    def __get_command(self, request_body):
+        commands = {
+            'about_connector': AboutConnector(request_body.args.get('time_zone', default='US/Eastern'))
+        }
+        return commands[self.command].response
 
 
 class RoomWizardCommand:
