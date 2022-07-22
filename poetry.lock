@@ -108,8 +108,8 @@ watchdog = ["watchdog"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.10"
-content-hash = "20886319a0afc76e594f4242b79822b425001d93458e3bcd0a8b64ad69e1a09e"
+python-versions = "3.10.4"
+content-hash = "f6bb5c76f024a780c8dadf0244843b4a89e69d912f4504ebbc4f125a4c301487"
 
 [metadata.files]
 arrow = []
