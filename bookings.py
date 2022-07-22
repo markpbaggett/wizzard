@@ -16,7 +16,6 @@ def rw_connector():
 @app.route('/admin/sign/RWUnitTypeAction', methods=['POST', 'GET'])
 def authentication():
     if request.method == 'POST':
-        print('This is running')
         response = app.response_class(
             response=json.dumps({"status": "success", "code": 0, "data": {"Name": "Eyong", "Age": 30}}),
             status=200,
@@ -24,7 +23,6 @@ def authentication():
         )
         return response
     if request.method == 'GET':
-        print('This is a get.')
         return "Success", 200, {'Content-Type': 'text/xml; charset=utf-8'}
 
 

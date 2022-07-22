@@ -39,9 +39,9 @@ class AboutConnector(RoomWizardCommand):
             <kwe:result_code>0</kwe:result_code>
             <kwe:connector>
                 <kwe:name>{self.connector_name}</kwe:name>
-                <kwe:version>3.1</kwe:version>
-                <kwe:api name="Room Booking API" version="1.0"></kwe:api>
-                <kwe:api name="Room Booking API" version="1.1"></kwe:api>
+                <kwe:version>0.1</kwe:version>
+                <kwe:short>Mark connector</kwe:short>
+                <kwe:api name="Room Booking API" version="1.0"/>
             </kwe:connector>
         </kwe:result>
         """
@@ -96,3 +96,16 @@ class GetBookings(RoomWizardCommand):
             </kwe:connector>
         </kwe:result>
         """
+
+
+class AddBooking(RoomWizardCommand):
+    def __init__(self, request_body):
+        super().__init__(request_body)
+        self.room_id = request_body.args.get('room_id', default='LIB_605')
+        self.range_start_date = request_body.args.get('range_start_date', default="today")
+        self.range_start_time = request_body.args.get('range_start_time', default="now")
+        self.range_end_date = request_body.args.get('range_end_date',
+                                                    default=arrow.utcnow().to(self.tz).shift(days=+1).format(
+                                                        'YYYYMMDD'))
+        self.range_end_time = request_body.args.get('range_end_time',
+                                                    default=arrow.utcnow().to(self.tz).shift(days=+1).format('HHmmss'))
