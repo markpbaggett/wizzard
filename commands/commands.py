@@ -31,8 +31,8 @@ class AboutConnector(RoomWizardCommand):
         return f"""
         <?xml version="1.0"?>
         <kwe:result
-            xmlns:kwe="http://www.appliancestudio.com/kwe/1.0"
-            xmlns:rb="http://www.appliancestudio.com/rb/1.0"
+            xmlns:kwe="http://www.appliancestudio.com/kwe/1.0/"
+            xmlns:rb="http://www.appliancestudio.com/rb/1.0/"
         >
             <kwe:date>{self.date}</kwe:date>
             <kwe:time>{self.time}</kwe:time>
@@ -61,8 +61,8 @@ class GetBookings(RoomWizardCommand):
         return f"""
         <?xml version="1.0"?>
         <kwe:result
-            xmlns:kwe="http://www.appliancestudio.com/kwe/1.0"
-            xmlns:rb="http://www.appliancestudio.com/rb/1.0"
+            xmlns:kwe="http://www.appliancestudio.com/kwe/1.0/"
+            xmlns:rb="http://www.appliancestudio.com/rb/1.0/"
         >
             <kwe:date>{self.date}</kwe:date>
             <kwe:time>{self.time}</kwe:time>
