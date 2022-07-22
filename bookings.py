@@ -15,6 +15,7 @@ def rw_connector():
 @app.route('/admin/sign/RWUnitTypeAction')
 def authentication():
     if request.method == 'POST':
+        print('This is running')
         return "Success", 200, {'Content-Type': 'text/xml; charset=utf-8'}
 
 
