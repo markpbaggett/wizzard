@@ -1,4 +1,6 @@
 import arrow
+from lxml.builder import ElementMaker
+from lxml import etree
 
 
 class GetResponse:
@@ -20,6 +22,17 @@ class RoomWizardCommand:
         self.date = arrow.utcnow().to(self.tz).format('YYYYMMDD')
         self.time = arrow.utcnow().to(self.tz).format('HHmmss')
         self.version = '0.1'
+        self.kwe = self.__build_namespace("http://www.appliancestudio.com/kwe/1.0/", 'kwe')
+        self.rb = self.__build_namespace("http://www.appliancestudio.com/rb/1.0/", 'rb')
+
+    @staticmethod
+    def __build_namespace(uri, short):
+        return ElementMaker(
+            namespace=uri,
+            nsmap={
+                short: uri,
+            }
+        )
 
 
 class AboutConnector(RoomWizardCommand):
@@ -29,23 +42,26 @@ class AboutConnector(RoomWizardCommand):
         self.response = self.__build_response().strip()
 
     def __build_response(self):
-        return f"""
-        <?xml version="1.0"?>
-        <kwe:result
-            xmlns:kwe="http://www.appliancestudio.com/kwe/1.0/"
-            xmlns:rb="http://www.appliancestudio.com/rb/1.0/"
-        >
-            <kwe:date>{self.date}</kwe:date>
-            <kwe:time>{self.time}</kwe:time>
-            <kwe:result_code>0</kwe:result_code>
-            <kwe:connector>
-                <kwe:name>{self.connector_name}</kwe:name>
-                <kwe:version>0.1</kwe:version>
-                <kwe:short>Mark connector</kwe:short>
-                <kwe:api name="Room Booking API" version="1.0"/>
-            </kwe:connector>
-        </kwe:result>
-        """
+        return etree.tostring(
+            self.__build_xml(),
+            pretty_print=True
+        )
+
+    def __build_xml(self):
+        return self.kwe.result(
+            self.kwe.date(self.date),
+            self.kwe.time(self.time),
+            self.kwe.result_code('0'),
+            self.kwe.connector(
+                self.kwe.name(self.connector_name),
+                self.kwe.version('0.1'),
+                self.kwe.short('Mark connector'),
+                self.kwe.api(
+                    name="Room Booking API",
+                    version="1.0"
+                )
+            )
+        )
 
 
 class GetBookings(RoomWizardCommand):
@@ -59,37 +75,32 @@ class GetBookings(RoomWizardCommand):
         self.response = self.__build_response().strip()
 
     def __build_response(self):
-        return f"""
-        <?xml version="1.0"?>
-        <kwe:result
-            xmlns:kwe="http://www.appliancestudio.com/kwe/1.0/"
-            xmlns:rb="http://www.appliancestudio.com/rb/1.0/"
-        >
-            <kwe:date>{self.date}</kwe:date>
-            <kwe:time>{self.time}</kwe:time>
-            <kwe:result_code>0</kwe:result_code>
-            <rb:bookings room_id="{self.room_id}">
-                    <rb:booking booking_id="mark123abc" confidential="no" password_protected="no">
-                        <rb:start_date>{self.range_start_date}</rb:start_date>
-                        <rb:end_date>{self.range_start_date}</rb:end_date>
-                        <rb:start_time>220000</rb:start_time>
-                        <rb:end_time>230000</rb:end_time>
-                        <rb:purpose>Mark's Meeting</rb:purpose>
-                        <rb:notes>Mark rules!</rb:notes>
-                    </rb:booking>
-                </rb:bookings>
-        </kwe:result>
-        """
+        return etree.tostring(
+            self.__build_xml(),
+            pretty_print=True
+        )
 
-
-class AddBooking(RoomWizardCommand):
-    def __init__(self, request_body):
-        super().__init__(request_body)
-        self.room_id = request_body.args.get('room_id', default='LIB_605')
-        self.range_start_date = request_body.args.get('range_start_date', default="today")
-        self.range_start_time = request_body.args.get('range_start_time', default="now")
-        self.range_end_date = request_body.args.get('range_end_date',
-                                                    default=arrow.utcnow().to(self.tz).shift(days=+1).format(
-                                                        'YYYYMMDD'))
-        self.range_end_time = request_body.args.get('range_end_time',
-                                                    default=arrow.utcnow().to(self.tz).shift(days=+1).format('HHmmss'))
+    def __build_xml(self):
+        return self.kwe.result(
+            self.kwe.date(self.date),
+            self.kwe.time(self.time),
+            self.kwe.result_code('0'),
+            self.rb.bookings(
+                self.rb.booking(
+                    self.rb.start_date(
+                        self.range_start_date
+                    ),
+                    self.rb.end_date(
+                        self.range_end_date
+                    ),
+                    self.rb.start_time('220000'),
+                    self.rb.end_time('230000'),
+                    self.rb.purpose("Mark's Meeting"),
+                    self.rb.notes("Mark rules!"),
+                    booking_id="mark123abc",
+                    confidential="no",
+                    password_protected="no"
+                ),
+                room_id=self.room_id,
+            )
+        )
