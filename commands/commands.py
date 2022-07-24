@@ -70,8 +70,12 @@ class GetBookings(RoomWizardCommand):
         self.room_id = request_body.args.get('room_id', default='LIB_605')
         self.range_start_date = request_body.args.get('range_start_date', default="today")
         self.range_start_time = request_body.args.get('range_start_time', default="now")
-        self.range_end_date = request_body.args.get('range_end_date', default=arrow.utcnow().to(self.tz).shift(days=+1).format('YYYYMMDD'))
-        self.range_end_time = request_body.args.get('range_end_time', default=arrow.utcnow().to(self.tz).shift(days=+1).format('HHmmss'))
+        self.range_end_date = request_body.args.get(
+            'range_end_date', default=arrow.utcnow().to(self.tz).shift(days=+1).format('YYYYMMDD')
+        )
+        self.range_end_time = request_body.args.get(
+            'range_end_time', default=arrow.utcnow().to(self.tz).shift(days=+1).format('HHmmss')
+        )
         self.response = self.__build_response().strip()
 
     def __build_response(self):
