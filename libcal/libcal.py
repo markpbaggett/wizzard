@@ -35,5 +35,3 @@ class RoomBookings:
         headers = GenerateToken(os.getenv('id'), os.getenv('secret')).token
         r = requests.get(self.endpoint, headers=headers)
         return r.json()
-
-
