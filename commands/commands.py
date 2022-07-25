@@ -1,6 +1,7 @@
 import arrow
 from lxml.builder import ElementMaker
 from lxml import etree
+from booking.booking import RoomWizard
 
 
 class GetResponse:
@@ -89,22 +90,36 @@ class GetBookings(RoomWizardCommand):
             self.kwe.date(self.date),
             self.kwe.time(self.time),
             self.kwe.result_code('0'),
-            self.rb.bookings(
+            self.__get_bookings_for_room()
+        )
+
+    def __get_bookings_for_room(self):
+        bookings = RoomWizard(self.room_id).get_bookings()
+        response = self.rb.bookings(room_id=self.room_id)
+        for booking in bookings:
+            response.append(
                 self.rb.booking(
                     self.rb.start_date(
-                        self.range_start_date
+                        booking['start_date']
                     ),
                     self.rb.end_date(
-                        self.range_end_date
+                        booking['end_date']
                     ),
-                    self.rb.start_time('220000'),
-                    self.rb.end_time('230000'),
-                    self.rb.purpose("Mark's Meeting"),
-                    self.rb.notes("Mark rules!"),
-                    booking_id="mark123abc",
+                    self.rb.start_time(
+                        booking['start_time']
+                    ),
+                    self.rb.end_time(
+                        booking['end_time']
+                    ),
+                    self.rb.purpose(
+                        booking['purpose']
+                    ),
+                    self.rb.notes(
+                        booking['notes']
+                    ),
+                    booking_id=booking['booking_id'],
                     confidential="no",
                     password_protected="no"
-                ),
-                room_id=self.room_id,
+                )
             )
-        )
+        return response
