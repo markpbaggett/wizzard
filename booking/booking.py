@@ -1,5 +1,6 @@
 from libcal.libcal import RoomBookings
 import arrow
+from uuid import uuid4
 
 
 class RoomWizard:
@@ -30,4 +31,7 @@ class Booking:
             'end_time': self.end_time,
             'purpose': self.purpose,
             'notes': self.notes,
+            'booking_id': str(uuid4()),
+            'confidential': 'no',
+            'password_protected': 'no',
         }
