@@ -12,6 +12,7 @@ gunicorn = "^20.1.0"
 lxml = "^4.9.1"
 requests = "^2.28.1"
 python-dotenv = "^0.20.0"
+uuid = "^1.30"
 
 [tool.poetry.dev-dependencies]
 
