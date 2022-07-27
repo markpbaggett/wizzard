@@ -1,9 +1,19 @@
-# Test Room Wizard Connector
+# Hedwig
 
 ## About
 
-A sample implementation of the Room Wizards Connector API to aid in understanding how a Room Wizard may poll
+A rewrite of [archimedes](https://github.com/utkdigitalinitiatives/archimedes) in Python.
 
-## Sample Requests
+This implements the SteelCase RoomWizard API and interfaces with the LibCal RoomBookings API.
 
-http://127.0.0.1:5000/rwconnector?command=get_bookings&room_id=LIB_605&range_start_date=2022_07_22&range_start_time=100000&range_end_date=2022_07_23&range_end_time=235959&timezone=Eastern
+## How Does This Work
+
+Students book rooms in [LibCal](https://libcal.utk.edu/booking/studyrooms).
+
+This application fetches data from the LibCal API and transforms it according to the RoomWizard API so that a RoomWizard
+can consume it.
+
+## Todo
+
+- [ ] Add configuration for various LibCal APIs and how often to poll LibCal.
+
