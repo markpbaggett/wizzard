@@ -1,8 +1,14 @@
-# Hedwig
+# Wizzard :mage_man:
+
+![Wizzard](https://i.ytimg.com/vi/BiQCvAnyyQI/hqdefault.jpg)
+ 
+Wiz! Totally Wizzed Out! Room booking with my #$@&%*! son! :guitar: :notes:
+
+Wiz! Totally Wizzed Out! [Archimedes](https://github.com/utkdigitalinitiatives/archimedes) is dead but that doesn't mean we can't have fun! :guitar: :notes:
 
 ## About
 
-A rewrite of [archimedes](https://github.com/utkdigitalinitiatives/archimedes) in Python.
+Wizzard is a rewrite of [archimedes](https://github.com/utkdigitalinitiatives/archimedes) in Python.
 
 This implements the SteelCase RoomWizard API and interfaces with the LibCal RoomBookings API.
 
