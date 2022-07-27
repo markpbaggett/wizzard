@@ -2,8 +2,28 @@
 from flask import Flask, request, jsonify
 from commands.commands import GetResponse
 import json
+from flask_apscheduler import APScheduler
+import arrow
+from libcal.libcal import RoomBookings
+from cache.libcal import LibCalCache
 
 app = Flask(__name__)
+scheduler = APScheduler()
+scheduler.api_enabled = True
+scheduler.init_app(app)
+
+all_current_bookings = LibCalCache(RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings())
+
+
+@scheduler.task('interval', id='libcal', seconds=900, misfire_grace_time=900)
+def job2():
+    """Updates the LibCal Cache that is passed to routes. Variable is a Borg Singleton that is garbage collected."""
+    all_current_bookings_two = LibCalCache(RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings())
+    """Print current bookings to log."""
+    print(all_current_bookings.current)
+
+
+scheduler.start()
 
 
 @app.route('/')
@@ -19,7 +39,7 @@ def rw_connector():
         specifying the content type of the response at index 2.
 
     """
-    x = GetResponse(request)
+    x = GetResponse(request, all_current_bookings.current)
     return x.response, 200, {'Content-Type': 'text/xml; charset=utf-8'}
 
 

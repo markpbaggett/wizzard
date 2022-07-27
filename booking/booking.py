@@ -1,4 +1,3 @@
-from libcal.libcal import RoomBookings
 import arrow
 from uuid import uuid4
 
@@ -16,8 +15,10 @@ class Room:
             currently implemented.
 
     """
-    def __init__(self, room_name):
+    def __init__(self, room_name, cache):
+        # TODO: Talk to cache instead of LibCal
         self.room_name = room_name
+        self.current_bookings = cache
 
     def get_bookings(self, date="today"):
         """Get the bookings of a particular RoomWizard on a specific date.
@@ -41,8 +42,7 @@ class Room:
 
         """
         # TODO: Use date instead of utcnow()
-        all_bookings = RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings()
-        return [Booking(booking).response for booking in all_bookings['bookings']['timeslots'] if self.room_name == booking['room_name']]
+        return [Booking(booking).response for booking in self.current_bookings['bookings']['timeslots'] if self.room_name == booking['room_name']]
 
 
 class Booking:
