@@ -42,7 +42,10 @@ class Room:
 
         """
         # TODO: Use date instead of utcnow()
-        return [Booking(booking).response for booking in self.current_bookings['bookings']['timeslots'] if self.room_name == booking['room_name']]
+        print(f"Room {self.room_name} is being requested.")
+        room_bookings = [Booking(booking).response for booking in self.current_bookings['bookings']['timeslots'] if self.room_name == booking['room_name']]
+        print(room_bookings)
+        return room_bookings
 
 
 class Booking:
