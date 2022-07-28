@@ -6,17 +6,20 @@ from flask_apscheduler import APScheduler
 import arrow
 from libcal.libcal import RoomBookings
 from cache.libcal import LibCalCache
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 scheduler = APScheduler()
 scheduler.api_enabled = True
 scheduler.init_app(app)
+load_dotenv()
 
 booking_data = RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings()
 all_current_bookings = LibCalCache(booking_data)
 
 
-@scheduler.task('interval', id='libcal', seconds=900, misfire_grace_time=900)
+@scheduler.task('interval', id='libcal', seconds=int(os.getenv('libcal_freq')), misfire_grace_time=900)
 def job2():
     """Updates the LibCal Cache that is passed to routes. Variable is a Borg Singleton that is garbage collected."""
     booking_data = RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings()
@@ -41,7 +44,9 @@ def rw_connector():
         specifying the content type of the response at index 2.
 
     """
-    x = GetResponse(request, all_current_bookings.current)
+    x = GetResponse(request, all_current_bookings.current,
+                    {'name': os.getenv('name'), 'version': os.getenv('version'), 'short': os.getenv('short')}
+                    )
     return x.response, 200, {'Content-Type': 'text/xml; charset=utf-8'}
 
 

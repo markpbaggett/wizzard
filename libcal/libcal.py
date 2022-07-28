@@ -95,7 +95,7 @@ class RoomBookings:
 
         """
         # TODO: Break out .env expectations from method.
-        headers = GenerateToken(os.getenv('id'), os.getenv('secret')).token
+        headers = GenerateToken(os.getenv('client_id'), os.getenv('secret')).token
         r = requests.get(self.endpoint, headers=headers)
         print(f'\t * Room Bookings request made to LibCal at {arrow.utcnow()}. Responded with {r.status_code} response.')
         return r.json()

@@ -19,14 +19,14 @@ class GetResponse:
         __get_command(request_body): gets XML response as bytes from the appropriate class.
 
     """
-    def __init__(self, request_body, current_bookings=None):
+    def __init__(self, request_body, current_bookings=None, about_info=None):
         self.command = request_body.args.get('command', default='about_connector')
-        self.response = self.__get_command(request_body, current_bookings)
+        self.response = self.__get_command(request_body, bookings=current_bookings, about=about_info)
 
-    def __get_command(self, request_body, bookings=None):
+    def __get_command(self, request_body, bookings=None, about=None):
         commands = {
-            'about_connector': AboutConnector(request_body),
-            'get_bookings': GetBookings(request_body, bookings),
+            'about_connector': AboutConnector(request_body, info=about),
+            'get_bookings': GetBookings(request_body, current_bookings=bookings),
         }
         return commands[self.command].response
 
@@ -83,10 +83,11 @@ class AboutConnector(RoomWizardCommand):
         __build_xml(): Returns XML for about_connector as an lxml.etree.Element
 
     """
-    def __init__(self, request_body):
+    def __init__(self, request_body, info):
         super().__init__(request_body)
         # TODO: Make connector_name more easily mutable.
-        self.connector_name = "Mark's Fabulous Room Wizard Connector"
+        self.connector_name = info['name']
+        self.connector_metadata = info
         self.response = self.__build_response().strip()
 
     def __build_response(self):
@@ -101,9 +102,9 @@ class AboutConnector(RoomWizardCommand):
             self.kwe.time(self.time),
             self.kwe.result_code('0'),
             self.kwe.connector(
-                self.kwe.name(self.connector_name),
-                self.kwe.version('0.1'),
-                self.kwe.short('Mark connector'),
+                self.kwe.name(self.connector_metadata['name']),
+                self.kwe.version(self.connector_metadata['version']),
+                self.kwe.short(self.connector_metadata['short']),
                 self.kwe.api(
                     name="Room Booking API",
                     version="1.0"
