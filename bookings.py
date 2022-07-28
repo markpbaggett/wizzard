@@ -12,13 +12,15 @@ scheduler = APScheduler()
 scheduler.api_enabled = True
 scheduler.init_app(app)
 
-all_current_bookings = LibCalCache(RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings())
+booking_data = RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings()
+all_current_bookings = LibCalCache(booking_data)
 
 
 @scheduler.task('interval', id='libcal', seconds=900, misfire_grace_time=900)
 def job2():
     """Updates the LibCal Cache that is passed to routes. Variable is a Borg Singleton that is garbage collected."""
-    all_current_bookings_two = LibCalCache(RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings())
+    booking_data = RoomBookings('10024', arrow.utcnow().format('YYYYMMDD')).get_bookings()
+    all_current_bookings_two = LibCalCache(booking_data)
     """Print current bookings to log."""
     print(all_current_bookings.current)
 
