@@ -134,7 +134,7 @@ class GetBookings(RoomWizardCommand):
     """
     def __init__(self, request_body, current_bookings):
         super().__init__(request_body)
-        self.room_id = request_body.args.get('room_id', default='LIB_605')
+        self.room_id = request_body.args.get('room_id', default='235K')
         self.current_bookings = current_bookings
         self.range_start_date = request_body.args.get('range_start_date', default="today")
         self.range_start_time = request_body.args.get('range_start_time', default="now")
