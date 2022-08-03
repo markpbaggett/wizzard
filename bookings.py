@@ -45,6 +45,7 @@ def rw_connector():
 
     """
     print(f"\n{request.headers}")
+    print(request.url)
     x = GetResponse(request, all_current_bookings.current,
                     {'name': os.getenv('name'), 'version': os.getenv('version'), 'short': os.getenv('short')}
                     )
