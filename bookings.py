@@ -44,6 +44,7 @@ def rw_connector():
         specifying the content type of the response at index 2.
 
     """
+    print(f"\n{request.headers}")
     x = GetResponse(request, all_current_bookings.current,
                     {'name': os.getenv('name'), 'version': os.getenv('version'), 'short': os.getenv('short')}
                     )
