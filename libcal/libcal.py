@@ -99,3 +99,22 @@ class RoomBookings:
         r = requests.get(self.endpoint, headers=headers)
         print(f'\t * Room Bookings request made to LibCal at {arrow.utcnow()}. Responded with {r.status_code} response.')
         return r.json()
+
+
+class Spaces:
+    def __init__(self, date):
+        self.date = date
+        self.endpoint = f" https://libcal.utk.edu/1.1/space/nickname/30611?date={date}"
+        self.headers = {"Content-Type": "application/json; charset=utf-8"}
+
+    def get_bookings(self):
+        headers = GenerateToken(os.getenv('client_id'), os.getenv('secret')).token
+        r = requests.get(self.endpoint, headers=headers)
+        print(
+            f'\t * Room Bookings request made to LibCal at {arrow.utcnow()}. Responded with {r.status_code} response.')
+        return r.json()
+
+
+if __name__ == "__main__":
+    x = Spaces('2022-08-10').get_bookings()
+    print(x)
